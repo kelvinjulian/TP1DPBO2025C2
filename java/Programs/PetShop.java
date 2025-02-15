@@ -2,84 +2,102 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PetShop {
-    static class Product {
-        private int id;
-        private String nama;
-        private String kategori;
-        private double harga;
+    // Data produk disimpan dalam empat ArrayList paralel
+    private ArrayList<Integer> ids;
+    private ArrayList<String> names;
+    private ArrayList<String> categories;
+    private ArrayList<Double> prices;
 
-        public Product(int id, String nama, String kategori, double harga) {
-            this.id = id;
-            this.nama = nama;
-            this.kategori = kategori;
-            this.harga = harga;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getNama() {
-            return nama;
-        }
-
-        public void setNama(String nama) {
-            this.nama = nama;
-        }
-
-        public String getKategori() {
-            return kategori;
-        }
-
-        public void setKategori(String kategori) {
-            this.kategori = kategori;
-        }
-
-        public double getHarga() {
-            return harga;
-        }
-
-        public void setHarga(double harga) {
-            this.harga = harga;
-        }
-    }
-
-    private ArrayList<Product> products;
-
+    // Konstruktor (tidak menggunakan array literal)
     public PetShop() {
-        products = new ArrayList<>();
-        products.add(new Product(1, "Dog Food", "Makanan", 50000));
-        products.add(new Product(2, "Cat Food", "Makanan", 45000));
-        products.add(new Product(3, "Shampoo Anjing", "Perawatan", 120000));
+        ids = new ArrayList<>();
+        names = new ArrayList<>();
+        categories = new ArrayList<>();
+        prices = new ArrayList<>();
+
+        // Menambahkan produk awal dengan metode add()
+        ids.add(1);
+        names.add("Dog Food");
+        categories.add("Makanan");
+        prices.add(50000.0);
+
+        ids.add(2);
+        names.add("Cat Food");
+        categories.add("Makanan");
+        prices.add(45000.0);
+
+        ids.add(3);
+        names.add("Shampoo Anjing");
+        categories.add("Perawatan");
+        prices.add(120000.0);
     }
 
+    // Setter dan Getter untuk produk berdasarkan indeks
+    public int getProductId(int index) {
+        return ids.get(index);
+    }
+
+    public void setProductId(int index, int id) {
+        ids.set(index, id);
+    }
+
+    public String getProductName(int index) {
+        return names.get(index);
+    }
+
+    public void setProductName(int index, String name) {
+        names.set(index, name);
+    }
+
+    public String getProductCategory(int index) {
+        return categories.get(index);
+    }
+
+    public void setProductCategory(int index, String category) {
+        categories.set(index, category);
+    }
+
+    public double getProductPrice(int index) {
+        return prices.get(index);
+    }
+
+    public void setProductPrice(int index, double price) {
+        prices.set(index, price);
+    }
+
+    // Mengecek apakah ID sudah ada
     public boolean isDuplicateId(int id) {
-        return products.stream().anyMatch(p -> p.getId() == id);
+        return ids.contains(id);
     }
 
+    // Mengecek apakah Nama sudah ada (case-insensitive)
     public boolean isDuplicateName(String name) {
-        return products.stream().anyMatch(p -> p.getNama().equalsIgnoreCase(name));
+        for (String n : names) {
+            if (n.equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void tampilkanProduk() {
-        if (products.isEmpty()) {
+        if (ids.isEmpty()) {
             System.out.println("\nDaftar produk kosong.");
             return;
         }
         System.out.println("\nDaftar Produk PetShop:");
-        for (Product p : products) {
-            System.out.println("ID: " + p.getId() + ", Nama: " + p.getNama() +
-                    ", Kategori: " + p.getKategori() + ", Harga: " + p.getHarga());
+        for (int i = 0; i < ids.size(); i++) {
+            System.out.println("ID: " + getProductId(i)
+                    + ", Nama: " + getProductName(i)
+                    + ", Kategori: " + getProductCategory(i)
+                    + ", Harga: " + getProductPrice(i));
         }
     }
 
     public void tambahProduk(Scanner scanner) {
         System.out.println("\nMasukkan ID, Nama Produk, Kategori Produk, dan Harga Produk (pisahkan dengan koma):");
-        String[] data = scanner.nextLine().split(",");
+        String input = scanner.nextLine();
+        String[] data = input.split(",");
         try {
             int id = Integer.parseInt(data[0].trim());
             String nama = data[1].trim();
@@ -95,7 +113,10 @@ public class PetShop {
                 return;
             }
 
-            products.add(new Product(id, nama, kategori, harga));
+            ids.add(id);
+            names.add(nama);
+            categories.add(kategori);
+            prices.add(harga);
             System.out.println("Produk berhasil ditambahkan!");
         } catch (Exception e) {
             System.out.println("Format input tidak valid. Silakan coba lagi.");
@@ -106,35 +127,41 @@ public class PetShop {
         try {
             System.out.print("\nMasukkan ID produk yang ingin diubah: ");
             int id = Integer.parseInt(scanner.nextLine());
-
-            for (Product p : products) {
-                if (p.getId() == id) {
-                    System.out.println("Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):");
-                    String[] data = scanner.nextLine().split(",");
-
-                    int newId = Integer.parseInt(data[0].trim());
-                    String nama = data[1].trim();
-                    String kategori = data[2].trim();
-                    double harga = Double.parseDouble(data[3].trim());
-
-                    if (newId != id && isDuplicateId(newId)) {
-                        System.out.println("ERROR: ID baru sudah digunakan oleh produk lain!");
-                        return;
-                    }
-                    if (!nama.equalsIgnoreCase(p.getNama()) && isDuplicateName(nama)) {
-                        System.out.println("ERROR: Nama produk baru sudah ada! Gunakan nama lain.");
-                        return;
-                    }
-
-                    p.setId(newId);
-                    p.setNama(nama);
-                    p.setKategori(kategori);
-                    p.setHarga(harga);
-                    System.out.println("Data produk berhasil diubah.");
-                    return;
+            int index = -1;
+            for (int i = 0; i < ids.size(); i++) {
+                if (getProductId(i) == id) {
+                    index = i;
+                    break;
                 }
             }
-            System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+            if (index == -1) {
+                System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+                return;
+            }
+
+            System.out.println("Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):");
+            String input = scanner.nextLine();
+            String[] data = input.split(",");
+            int newId = Integer.parseInt(data[0].trim());
+            String nama = data[1].trim();
+            String kategori = data[2].trim();
+            double harga = Double.parseDouble(data[3].trim());
+
+            if (newId != id && isDuplicateId(newId)) {
+                System.out.println("ERROR: ID baru sudah digunakan oleh produk lain!");
+                return;
+            }
+            if (!nama.equalsIgnoreCase(getProductName(index)) && isDuplicateName(nama)) {
+                System.out.println("ERROR: Nama produk baru sudah ada! Gunakan nama lain.");
+                return;
+            }
+
+            // Update produk melalui setter
+            setProductId(index, newId);
+            setProductName(index, nama);
+            setProductCategory(index, kategori);
+            setProductPrice(index, harga);
+            System.out.println("Data produk berhasil diubah.");
         } catch (Exception e) {
             System.out.println("Format input tidak valid.");
         }
@@ -144,15 +171,22 @@ public class PetShop {
         try {
             System.out.print("\nMasukkan ID produk yang ingin dihapus: ");
             int id = Integer.parseInt(scanner.nextLine());
-
-            for (int i = 0; i < products.size(); i++) {
-                if (products.get(i).getId() == id) {
-                    products.remove(i);
-                    System.out.println("Produk berhasil dihapus.");
-                    return;
+            int index = -1;
+            for (int i = 0; i < ids.size(); i++) {
+                if (getProductId(i) == id) {
+                    index = i;
+                    break;
                 }
             }
-            System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+            if (index != -1) {
+                ids.remove(index);
+                names.remove(index);
+                categories.remove(index);
+                prices.remove(index);
+                System.out.println("Produk berhasil dihapus.");
+            } else {
+                System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+            }
         } catch (Exception e) {
             System.out.println("Format input tidak valid.");
         }
@@ -162,17 +196,18 @@ public class PetShop {
         System.out.print("\nMasukkan nama produk yang ingin dicari: ");
         String nama = scanner.nextLine().trim();
         boolean found = false;
-
-        for (Product p : products) {
-            if (p.getNama().equalsIgnoreCase(nama)) {
-                System.out.println("Produk ditemukan: ID: " + p.getId() +
-                        ", Nama: " + p.getNama() + ", Kategori: " + p.getKategori() + ", Harga: " + p.getHarga());
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).equalsIgnoreCase(nama)) {
+                System.out.println("Produk ditemukan: ID: " + getProductId(i)
+                        + ", Nama: " + getProductName(i)
+                        + ", Kategori: " + getProductCategory(i)
+                        + ", Harga: " + getProductPrice(i));
                 found = true;
             }
         }
-
         if (!found) {
             System.out.println("Produk dengan nama '" + nama + "' tidak ditemukan.");
         }
     }
+    
 }

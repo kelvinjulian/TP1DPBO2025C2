@@ -16,7 +16,6 @@ public class Main {
             System.out.print("Pilih opsi: ");
 
             String pilihan = scanner.nextLine();
-
             switch (pilihan) {
                 case "1":
                     petshop.tampilkanProduk();
