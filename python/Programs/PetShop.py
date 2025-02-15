@@ -1,62 +1,77 @@
-# PetShop.py
 class PetShop:
-    class Product:
-        def __init__(self, id, nama, kategori, harga):
-            self.id = id
-            self.nama = nama
-            self.kategori = kategori
-            self.harga = harga
-        
-        def get_id(self):
-            return self.id
-        
-        def set_id(self, id):
-            self.id = id
-        
-        def get_nama(self):
-            return self.nama
-        
-        def set_nama(self, nama):
-            self.nama = nama
-        
-        def get_kategori(self):
-            return self.kategori
-        
-        def set_kategori(self, kategori):
-            self.kategori = kategori
-        
-        def get_harga(self):
-            return self.harga
-        
-        def set_harga(self, harga):
-            self.harga = harga
-    
     def __init__(self):
-        self.products = [
-            self.Product(1, "Dog Food", "Makanan", 50000),
-            self.Product(2, "Cat Food", "Makanan", 45000),
-            self.Product(3, "Shampoo Anjing", "Perawatan", 120000)
-        ]
+        # Data produk disimpan dalam empat list paralel
+        self.ids = []
+        self.names = []
+        self.categories = []
+        self.hargas = []
+        
+        # Menambahkan produk awal menggunakan append (tanpa list literal)
+        self.ids.append(1)
+        self.names.append("Dog Food")
+        self.categories.append("Makanan")
+        self.hargas.append(50000)
+        
+        self.ids.append(2)
+        self.names.append("Cat Food")
+        self.categories.append("Makanan")
+        self.hargas.append(45000)
+        
+        self.ids.append(3)
+        self.names.append("Shampoo Anjing")
+        self.categories.append("Perawatan")
+        self.hargas.append(120000)
     
+    # Setter dan Getter untuk tiap atribut produk berdasarkan index
+    def get_product_id(self, index):
+        return self.ids[index]
+    
+    def set_product_id(self, index, id):
+        self.ids[index] = id
+    
+    def get_product_name(self, index):
+        return self.names[index]
+    
+    def set_product_name(self, index, name):
+        self.names[index] = name
+    
+    def get_product_category(self, index):
+        return self.categories[index]
+    
+    def set_product_category(self, index, category):
+        self.categories[index] = category
+    
+    def get_product_harga(self, index):
+        return self.hargas[index]
+    
+    def set_product_harga(self, index, harga):
+        self.hargas[index] = harga
+    
+    # Mengecek apakah ID sudah ada
     def is_duplicate_id(self, id):
-        return any(p.get_id() == id for p in self.products)
+        return id in self.ids
     
+    # Mengecek apakah nama produk sudah ada (case-insensitive)
     def is_duplicate_name(self, name):
-        return any(p.get_nama().lower() == name.lower() for p in self.products)
+        return any(n.lower() == name.lower() for n in self.names)
     
     def tampilkan_produk(self):
-        if not self.products:
+        if not self.ids:
             print("\nDaftar produk kosong.")
             return
         print("\nDaftar Produk PetShop:")
-        for p in self.products:
-            print(f"ID: {p.get_id()}, Nama: {p.get_nama()}, Kategori: {p.get_kategori()}, Harga: {p.get_harga()}")
+        for i in range(len(self.ids)):
+            print(f"ID: {self.get_product_id(i)}, Nama: {self.get_product_name(i)}, "
+                  f"Kategori: {self.get_product_category(i)}, Harga: {self.get_product_harga(i)}")
     
     def tambah_produk(self):
-        print("\nMasukkan ID, Nama Produk, Kategori Produk, dan Harga Produk:")
+        print("\nMasukkan ID, Nama Produk, Kategori Produk, dan Harga Produk (pisahkan dengan koma):")
         try:
             data = input().split(",")
-            id, nama, kategori, harga = int(data[0].strip()), data[1].strip(), data[2].strip(), float(data[3].strip())
+            id = int(data[0].strip())
+            nama = data[1].strip()
+            kategori = data[2].strip()
+            harga = float(data[3].strip())
             
             if self.is_duplicate_id(id):
                 print("ERROR: ID sudah ada! Gunakan ID lain.")
@@ -65,54 +80,76 @@ class PetShop:
                 print("ERROR: Nama produk sudah ada! Gunakan nama lain.")
                 return
             
-            self.products.append(self.Product(id, nama, kategori, harga))
+            self.ids.append(id)
+            self.names.append(nama)
+            self.categories.append(kategori)
+            self.hargas.append(harga)
             print("Produk berhasil ditambahkan!")
-        except:
+        except Exception as e:
             print("Format input tidak valid. Silakan coba lagi.")
     
     def ubah_produk(self):
         try:
             id = int(input("\nMasukkan ID produk yang ingin diubah: "))
-            for p in self.products:
-                if p.get_id() == id:
-                    print("Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):")
-                    data = input().split(",")
-                    new_id, nama, kategori, harga = int(data[0].strip()), data[1].strip(), data[2].strip(), float(data[3].strip())
-                    
-                    if new_id != id and self.is_duplicate_id(new_id):
-                        print("ERROR: ID baru sudah digunakan oleh produk lain!")
-                        return
-                    if nama != p.get_nama() and self.is_duplicate_name(nama):
-                        print("ERROR: Nama produk baru sudah ada! Gunakan nama lain.")
-                        return
-                    
-                    p.set_id(new_id)
-                    p.set_nama(nama)
-                    p.set_kategori(kategori)
-                    p.set_harga(harga)
-                    print("Data produk berhasil diubah.")
-                    return
-            print(f"Produk dengan ID {id} tidak ditemukan.")
-        except:
+            index = -1
+            for i in range(len(self.ids)):
+                if self.get_product_id(i) == id:
+                    index = i
+                    break
+            if index == -1:
+                print(f"Produk dengan ID {id} tidak ditemukan.")
+                return
+            
+            print("Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):")
+            data = input().split(",")
+            new_id = int(data[0].strip())
+            nama = data[1].strip()
+            kategori = data[2].strip()
+            harga = float(data[3].strip())
+            
+            if new_id != id and self.is_duplicate_id(new_id):
+                print("ERROR: ID baru sudah digunakan oleh produk lain!")
+                return
+            if nama.lower() != self.get_product_name(index).lower() and self.is_duplicate_name(nama):
+                print("ERROR: Nama produk baru sudah ada! Gunakan nama lain.")
+                return
+            
+            self.set_product_id(index, new_id)
+            self.set_product_name(index, nama)
+            self.set_product_category(index, kategori)
+            self.set_product_harga(index, harga)
+            print("Data produk berhasil diubah.")
+        except Exception as e:
             print("Format input tidak valid.")
     
     def hapus_produk(self):
         try:
             id = int(input("\nMasukkan ID produk yang ingin dihapus: "))
-            for i, p in enumerate(self.products):
-                if p.get_id() == id:
-                    del self.products[i]
-                    print("Produk berhasil dihapus.")
-                    return
-            print(f"Produk dengan ID {id} tidak ditemukan.")
-        except:
+            index = -1
+            for i in range(len(self.ids)):
+                if self.get_product_id(i) == id:
+                    index = i
+                    break
+            if index != -1:
+                del self.ids[index]
+                del self.names[index]
+                del self.categories[index]
+                del self.hargas[index]
+                print("Produk berhasil dihapus.")
+            else:
+                print(f"Produk dengan ID {id} tidak ditemukan.")
+        except Exception as e:
             print("Format input tidak valid.")
     
     def cari_produk(self):
         nama = input("\nMasukkan nama produk yang ingin dicari: ").strip()
-        found = [p for p in self.products if p.get_nama().lower() == nama.lower()]
-        if found:
-            for p in found:
-                print(f"Produk ditemukan: ID: {p.get_id()}, Nama: {p.get_nama()}, Kategori: {p.get_kategori()}, Harga: {p.get_harga()}")
-        else:
+        found = False
+        for i in range(len(self.ids)):
+            if self.get_product_name(i).lower() == nama.lower():
+                print(f"Produk ditemukan: ID: {self.get_product_id(i)}, Nama: {self.get_product_name(i)}, "
+                      f"Kategori: {self.get_product_category(i)}, Harga: {self.get_product_harga(i)}")
+                found = True
+        if not found:
             print(f"Produk dengan nama '{nama}' tidak ditemukan.")
+
+
