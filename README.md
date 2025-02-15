@@ -1,4 +1,4 @@
-# TP1DPBO2025C2
+# TP1DPBO2025C2 dan Latihan Modul
 
 # Janji
 Saya Kelvin Julian Putra dengan NIM 2205101 mengerjakan Tugas Praktikum 1 dalam mata kuliah Desain dan Pemrograman Berorientasi Objek untuk keberkahanNya maka saya tidak melakukan kecurangan seperti yang telah dispesifikasikan. Aamiin
