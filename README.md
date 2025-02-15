@@ -56,4 +56,4 @@ Berikut adalah beberapa tampilan dari program:
 
 ## Class Diagram
 
-![Class Diagram](https://github.com/kelvinjulian/LM1DPBO2025C2/blob/main/c%2B%2B/Screenshots/PetShop%20Class%20Diagram.png)
+![Class Diagram](https://github.com/kelvinjulian/TP1DPBO2025C2/blob/main/Class%20Diagram.drawio.png)
