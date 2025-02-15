@@ -82,6 +82,8 @@ Berikut adalah beberapa tampilan dari program:
 ## Screenrecord (PHP)
 (https://drive.google.com/file/d/1XAYyEMAkhgbrZY1IXFX52MYn12cWOrqz/view?usp=sharing)
 
+<!--
 ## Class Diagram
 
 ![Class Diagram](https://github.com/kelvinjulian/TP1DPBO2025C2/blob/main/Class%20Diagram.drawio.png)
+-->
