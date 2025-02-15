@@ -1,8 +1,8 @@
-# LM1DPBO2025C2
+# TP1DPBO2025C2
 
 # PetShop
 
-PetShop adalah program berbasis C++ yang menggunakan konsep Object-Oriented Programming (OOP) untuk mengelola daftar produk di sebuah petshop. Program ini memungkinkan pengguna untuk menambahkan, mengubah, menghapus, mencari, dan menampilkan daftar produk.
+PetShop adalah program yang menggunakan konsep Object-Oriented Programming (OOP) untuk mengelola daftar produk di sebuah petshop. Program ini memungkinkan pengguna untuk menambahkan, mengubah, menghapus, mencari, dan menampilkan daftar produk.
 
 ## Fitur Utama
 
@@ -11,13 +11,13 @@ PetShop adalah program berbasis C++ yang menggunakan konsep Object-Oriented Prog
 - Mengubah data produk yang sudah ada
 - Menghapus produk berdasarkan ID
 - Mencari produk berdasarkan nama
-
+  
 ## Struktur Program
 
 Program terdiri dari dua file utama:
 
-1. `main.cpp` - File utama yang menangani interaksi dengan pengguna.
-2. `PetShop.cpp` - Implementasi kelas `PetShop` yang berisi daftar produk dan fungsi-fungsi pengelolaannya.
+1. `main` - File utama yang menangani interaksi dengan pengguna.
+2. `PetShop` - Implementasi kelas `PetShop` yang berisi daftar produk dan fungsi-fungsi pengelolaannya.
 
 ## Screenshot
 
@@ -50,6 +50,9 @@ Berikut adalah beberapa tampilan dari program:
 ### 7. Error Duplikat
 
 ![Error Duplikat](https://github.com/kelvinjulian/LM1DPBO2025C2/blob/main/c%2B%2B/Screenshots/Error%20Duplikat.png)
+
+## Screenrecord (PHP)
+(https://drive.google.com/file/d/1XAYyEMAkhgbrZY1IXFX52MYn12cWOrqz/view?usp=sharing)
 
 ## Class Diagram
 
