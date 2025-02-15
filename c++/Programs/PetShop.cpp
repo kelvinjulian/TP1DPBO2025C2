@@ -5,47 +5,56 @@ using namespace std;
 
 class PetShop {
 private:
-    struct Product {
-        int id;
-        string nama;
-        string kategori;
-        float harga;
+    // Menyimpan data produk menggunakan 4 vector paralel
+    vector<int> ids;
+    vector<string> names;
+    vector<string> categories;
+    vector<float> prices;
 
-        // Constructor untuk inisialisasi Product
-        Product(int id, string nama, string kategori, float harga)
-            : id(id), nama(nama), kategori(kategori), harga(harga) {}
+    // Setter dan Getter untuk masing-masing atribut produk berdasarkan index
+    int getProductId(int index) const {
+        return ids[index];
+    }
+    void setProductId(int index, int id) {
+        ids[index] = id;
+    }
 
-        // Getter dan Setter
-        int getId() const { return id; }
-        void setId(int id) { this->id = id; }
+    string getProductName(int index) const {
+        return names[index];
+    }
+    void setProductName(int index, const string &name) {
+        names[index] = name;
+    }
 
-        string getNama() const { return nama; }
-        void setNama(const string& nama) { this->nama = nama; }
+    string getProductCategory(int index) const {
+        return categories[index];
+    }
+    void setProductCategory(int index, const string &category) {
+        categories[index] = category;
+    }
 
-        string getKategori() const { return kategori; }
-        void setKategori(const string& kategori) { this->kategori = kategori; }
-
-        float getHarga() const { return harga; }
-        void setHarga(float harga) { this->harga = harga; }
-    };
-
-    vector<Product> products;
+    float getProductPrice(int index) const {
+        return prices[index];
+    }
+    void setProductPrice(int index, float price) {
+        prices[index] = price;
+    }
 
     // Fungsi untuk mengecek apakah ID sudah ada
     bool isDuplicateID(int id) {
-        for (const auto& p : products) {
-            if (p.getId() == id) {
-                return true; 
+        for (int x : ids) {
+            if (x == id) {
+                return true;
             }
         }
-        return false; 
+        return false;
     }
 
     // Fungsi untuk mengecek apakah Nama Produk sudah ada
-    bool isDuplicateName(const string& name) {
-        for (const auto& p : products) {
-            if (p.getNama() == name) {
-                return true; 
+    bool isDuplicateName(const string &name) {
+        for (const auto &n : names) {
+            if (n == name) {
+                return true;
             }
         }
         return false;
@@ -54,24 +63,35 @@ private:
 public:
     PetShop() {
         // Menambahkan produk awal
-        products.push_back(Product(1, "Dog Food", "Makanan", 50000));
-        products.push_back(Product(2, "Cat Food", "Makanan", 45000));
-        products.push_back(Product(3, "Shampoo Anjing", "Perawatan", 120000));
+        ids.push_back(1);
+        names.push_back("Dog Food");
+        categories.push_back("Makanan");
+        prices.push_back(50000);
+
+        ids.push_back(2);
+        names.push_back("Cat Food");
+        categories.push_back("Makanan");
+        prices.push_back(45000);
+
+        ids.push_back(3);
+        names.push_back("Shampoo Anjing");
+        categories.push_back("Perawatan");
+        prices.push_back(120000);
     }
 
     void tampilkanProduk() {
-        if (products.empty()) {
+        if (ids.empty()) {
             cout << "\nDaftar produk kosong." << endl;
             return;
         }
 
         cout << "\nDaftar Produk PetShop:\n";
-        for (const auto& p : products) {
-            cout << "ID: " << p.getId() 
-                << ", Nama: " << p.getNama() 
-                << ", Kategori: " << p.getKategori()
-                << ", Harga: " << p.getHarga()
-                << endl;
+        for (size_t i = 0; i < ids.size(); i++) {
+            cout << "ID: " << getProductId(i)
+                 << ", Nama: " << getProductName(i)
+                 << ", Kategori: " << getProductCategory(i)
+                 << ", Harga: " << getProductPrice(i)
+                 << endl;
         }
     }
 
@@ -103,7 +123,10 @@ public:
                 return;
             }
 
-            products.push_back(Product(id, nama, kategori, harga));
+            ids.push_back(id);
+            names.push_back(nama);
+            categories.push_back(kategori);
+            prices.push_back(harga);
             cout << "Produk berhasil ditambahkan!\n";
         } else {
             cout << "Format input tidak valid. Silakan coba lagi.\n";
@@ -116,53 +139,55 @@ public:
         cin >> id;
         cin.ignore();
 
-        bool found = false;
-        for (auto& p : products) {
-            if (p.getId() == id) {
-                cout << "Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):\n";
-                string input;
-                getline(cin, input);
-
-                stringstream ss(input);
-                string idStr, nama, kategori, hargaStr;
-
-                if (getline(ss, idStr, ',') &&
-                    getline(ss >> ws, nama, ',') &&
-                    getline(ss >> ws, kategori, ',') &&
-                    getline(ss >> ws, hargaStr)) {
-
-                    int newId = stoi(idStr);
-                    float newHarga = stof(hargaStr);
-
-                    // Pastikan ID baru tidak bentrok dengan produk lain
-                    if (newId != id && isDuplicateID(newId)) {
-                        cout << "ERROR: ID baru sudah digunakan oleh produk lain!\n";
-                        return;
-                    }
-
-                    // Pastikan Nama baru tidak bentrok dengan produk lain
-                    if (nama != p.getNama() && isDuplicateName(nama)) {
-                        cout << "ERROR: Nama produk baru sudah ada! Gunakan nama lain.\n";
-                        return;
-                    }
-
-                    // Update produk
-                    p.setId(newId);
-                    p.setNama(nama);
-                    p.setKategori(kategori);
-                    p.setHarga(newHarga);
-
-                    cout << "Data produk berhasil diubah.\n";
-                    found = true;
-                } else {
-                    cout << "Format input tidak valid.\n";
-                }
+        int index = -1;
+        for (size_t i = 0; i < ids.size(); i++) {
+            if (getProductId(i) == id) {
+                index = i;
                 break;
             }
         }
 
-        if (!found) {
+        if (index == -1) {
             cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
+            return;
+        }
+
+        cout << "Masukkan data baru (ID, Nama Produk, Kategori Produk, Harga Produk):\n";
+        string input;
+        getline(cin, input);
+
+        stringstream ss(input);
+        string idStr, nama, kategori, hargaStr;
+
+        if (getline(ss, idStr, ',') &&
+            getline(ss >> ws, nama, ',') &&
+            getline(ss >> ws, kategori, ',') &&
+            getline(ss >> ws, hargaStr)) {
+
+            int newId = stoi(idStr);
+            float newHarga = stof(hargaStr);
+
+            // Pastikan ID baru tidak bentrok dengan produk lain (kecuali produk yang sama)
+            if (newId != id && isDuplicateID(newId)) {
+                cout << "ERROR: ID baru sudah digunakan oleh produk lain!\n";
+                return;
+            }
+
+            // Pastikan Nama baru tidak bentrok dengan produk lain (kecuali produk yang sama)
+            if (nama != getProductName(index) && isDuplicateName(nama)) {
+                cout << "ERROR: Nama produk baru sudah ada! Gunakan nama lain.\n";
+                return;
+            }
+
+            // Update produk menggunakan setter
+            setProductId(index, newId);
+            setProductName(index, nama);
+            setProductCategory(index, kategori);
+            setProductPrice(index, newHarga);
+
+            cout << "Data produk berhasil diubah.\n";
+        } else {
+            cout << "Format input tidak valid.\n";
         }
     }
 
@@ -171,27 +196,38 @@ public:
         cout << "\nMasukkan ID produk yang ingin dihapus: ";
         cin >> id;
 
-        for (auto it = products.begin(); it != products.end(); ++it) {
-            if (it->getId() == id) {
-                products.erase(it);
-                cout << "Produk berhasil dihapus.\n";
-                return;
+        int index = -1;
+        for (size_t i = 0; i < ids.size(); i++) {
+            if (getProductId(i) == id) {
+                index = i;
+                break;
             }
         }
-        cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
+
+        if (index != -1) {
+            ids.erase(ids.begin() + index);
+            names.erase(names.begin() + index);
+            categories.erase(categories.begin() + index);
+            prices.erase(prices.begin() + index);
+            cout << "Produk berhasil dihapus.\n";
+        } else {
+            cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
+        }
     }
 
     void cariProduk() {
-        string nama;
         cout << "\nMasukkan nama produk yang ingin dicari: ";
+        string nama;
         cin.ignore();
         getline(cin, nama);
 
         bool found = false;
-        for (const auto& p : products) {
-            if (p.getNama() == nama) {
-                cout << "Produk ditemukan: ID: " << p.getId() << ", Nama: " << p.getNama()
-                     << ", Kategori: " << p.getKategori() << ", Harga: " << p.getHarga()
+        for (size_t i = 0; i < names.size(); i++) {
+            if (getProductName(i) == nama) {
+                cout << "Produk ditemukan: ID: " << getProductId(i)
+                     << ", Nama: " << getProductName(i)
+                     << ", Kategori: " << getProductCategory(i)
+                     << ", Harga: " << getProductPrice(i)
                      << endl;
                 found = true;
             }
@@ -202,3 +238,4 @@ public:
         }
     }
 };
+
